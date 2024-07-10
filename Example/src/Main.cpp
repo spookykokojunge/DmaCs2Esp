@@ -66,8 +66,8 @@ namespace Offsets {
 
 
 
-    uint64_t m_vOldOrigin = 0x1274;
-    uint64_t dwViewMatrix = 0x1A1FCD0;
+uint64_t m_vOldOrigin = 0x1274;
+uint64_t dwViewMatrix = 0x1A1FCD0;
 
 void CreateConsole() {
     AllocConsole();
@@ -203,6 +203,22 @@ int APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, int cmd_show)
 
     bool running = true;
 
+    // Declare all variables before the loop so we dont define them over and over aigan.
+    uint64_t LocalPlayer;
+    uint64_t entityList;
+    View_matrix_t View_Matrix;
+    Vector3 localplayerpos;
+    uint64_t currentController[64] = { 0 };
+    uint64_t currentPawn[64] = { 0 };
+    uint64_t listEntry2;
+    uint64_t pawnHandle = 0;
+    Vector3 enemyPos;
+    RGB enemy = { 255, 0, 0 };
+    uint64_t lifestate;
+    uint64_t listEntry;
+
+
+
     while (running)
     {
         MSG msg;
@@ -221,60 +237,91 @@ int APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, int cmd_show)
         {
             break;
         }
+        // Step 1: Create scatter handle for initial reads
+        auto Handle = mem.CreateScatterHandle();
 
+        // Step 2: Add scatter read requests for initial values
+        mem.AddScatterReadRequest(Handle, base + Offsets::dwLocalPlayerPawn, &LocalPlayer, sizeof(uint64_t));
+        mem.AddScatterReadRequest(Handle, base + Offsets::dwEntityList, &entityList, sizeof(uint64_t));
+        mem.AddScatterReadRequest(Handle, base + dwViewMatrix, &View_Matrix, sizeof(View_matrix_t));
 
-        //read LocalPlayer
-        uint64_t LocalPlayer = mem.Read<uint64_t>(base + Offsets::dwLocalPlayerPawn);
+        // Execute the scatter read
+        mem.ExecuteReadScatter(Handle);
 
-        uint64_t entityList = mem.Read<uint64_t>(base + Offsets::dwEntityList);
+        // Read local player position
+        if (LocalPlayer != 0) {
+            mem.AddScatterReadRequest(Handle, LocalPlayer + m_vOldOrigin, &localplayerpos, sizeof(Vector3));
+            mem.ExecuteReadScatter(Handle);
+            //std::cout << "LOCALPLAYER X: " << localplayerpos.x << " Y: " << localplayerpos.y << " Z: " << localplayerpos.z << std::endl;
+
+        }
+
         if (entityList == 0)
             continue;
-
-        uint64_t listEntry = mem.Read<uint64_t>(entityList + 0x10);
+        mem.AddScatterReadRequest(Handle, entityList + 0x10, &listEntry, sizeof(uint64_t));
+        mem.ExecuteReadScatter(Handle);
+        //uint64_t listEntry = mem.Read<uint64_t>(entityList + 0x10);
         if (listEntry == 0)
             continue;
 
-        //read View_Matrix
-        View_matrix_t View_Matrix = mem.Read<View_matrix_t>(base + dwViewMatrix);
-        //read localPlayerPos
-        Vector3 localplayerpos = mem.Read<Vector3>(LocalPlayer + m_vOldOrigin);
+
 
         ImGui_ImplDX11_NewFrame();
         ImGui_ImplWin32_NewFrame();
         ImGui::NewFrame();
+        // Step 3: Create scatter handle for entity list reads
+        for (int i = 0; i < 64; i++)
+        {
+            mem.AddScatterReadRequest(Handle, listEntry + i * 0x78, &currentController[i], sizeof(uint64_t));
+        }
+
+        // Execute the scatter read
+        mem.ExecuteReadScatter(Handle);
 
         for (int i = 0; i < 64; i++)
         {
-            if (listEntry == 0) // skip if invalid
+            if (currentController[i] == 0) // skip if invalid
                 continue;
 
-            uint64_t currentController = mem.Read<uint64_t>(listEntry + i * 0x78);
-            if (currentController == 0)
-                continue; // skip if invalid
+            // Create scatter handle for pawn handle reads
+            mem.AddScatterReadRequest(Handle, currentController[i] + Offsets::m_hPlayerPawn, &pawnHandle, sizeof(uint64_t));
+            mem.ExecuteReadScatter(Handle);
 
-            uint64_t pawnHandle = mem.Read<uint64_t>(currentController + Offsets::m_hPlayerPawn);
             if (pawnHandle == 0)
                 continue; // skip if invalid
-
-            uint64_t listEntry2 = mem.Read<uint64_t>(entityList + 0x8 * ((pawnHandle & 0x7FFF) >> 9) + 0x10);
+            mem.AddScatterReadRequest(Handle, entityList + 0x8 * ((pawnHandle & 0x7FFF) >> 9) + 0x10, &listEntry2, sizeof(uint64_t));
+            mem.ExecuteReadScatter(Handle);
+            //uint64_t listEntry2 = mem.Read<uint64_t>(entityList + 0x8 * ((pawnHandle & 0x7FFF) >> 9) + 0x10);
             if (listEntry2 == 0)
                 continue;
 
-            uint64_t currentPawn = mem.Read<uint64_t>(listEntry2 + 0x78 * (pawnHandle & 0x1FF));
-            if (currentPawn == 0)
+            // Create scatter handle for current pawn reads
+            mem.AddScatterReadRequest(Handle, listEntry2 + 0x78 * (pawnHandle & 0x1FF), &currentPawn[i], sizeof(uint64_t));
+            mem.ExecuteReadScatter(Handle);
+
+            if (currentPawn[i] == 0)
                 continue;
 
-            uint64_t lifestate = mem.Read<uint64_t>(currentPawn + Offsets::m_lifeState);
+
+            mem.AddScatterReadRequest(Handle, currentPawn[i] + Offsets::m_lifeState, &lifestate, sizeof(uint64_t));
+            mem.ExecuteReadScatter(Handle);
+
+            //uint64_t lifestate = mem.Read<uint64_t>(currentPawn[i] + Offsets::m_lifeState);
             if (lifestate != 256)
             {
                 continue;
             }
-            if (currentPawn == LocalPlayer)
+            if (currentPawn[i] == LocalPlayer)
             {
                 continue;
             }
-            //reading enemy pos
-            Vector3 enemyPos = mem.Read<Vector3>(currentPawn + m_vOldOrigin);
+
+            // Create scatter handle for enemy position reads
+            mem.AddScatterReadRequest(Handle, currentPawn[i] + m_vOldOrigin, &enemyPos, sizeof(Vector3));
+            mem.ExecuteReadScatter(Handle);
+            //We're done with using the scatter handle...
+            //mem.CloseScatterHandle(Handle);
+            //std::cout << "ENEMYS X: " << enemyPos.x << " Y: " << enemyPos.y << " Z: " << enemyPos.z << std::endl;
 
 
             Vector3 head = { enemyPos.x, enemyPos.y, enemyPos.z + 75.f };
@@ -285,14 +332,13 @@ int APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, int cmd_show)
             float height = screenPos.y - screenHead.y;
             float width = height / 2.4f;
 
-            RGB enemy = { 255, 0, 0 };
 
 
             //ImGui::GetBackgroundDrawList()->AddCircleFilled({ 500, 500 }, 10.f, ImColor(1.f, 0.f, 0.f));
-            //draws box around enemy
+            // draws box around enemy
             Render::DrawRect(screenHead.x - width / 2, screenHead.y, width, height, enemy, 1.5);
-        }
 
+        }
         ImGui::Render();
         float color[4]{ 0, 0, 0, 0 };
         device_context->OMSetRenderTargets(1U, &render_target_view, nullptr);
@@ -301,7 +347,12 @@ int APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, int cmd_show)
         ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
         swap_chain->Present(1U, 0U); //if (1U, 0U) you replace that 0 with a 1 vsync will be on!
+        //We're done with using the scatter handle...
+        mem.CloseScatterHandle(Handle);
     }
+
+
+
 
     //exiting
     ImGui_ImplWin32_Shutdown();
