@@ -49,25 +49,16 @@ LRESULT CALLBACK window_procedure(HWND window, UINT message, WPARAM w_param, LPA
 }
 
 namespace Offsets {
-    //offsets
-    uint64_t dwEntityList = 0x19BDD78;
+    uint64_t dwEntityList = 0x19BDD58;
+    uint64_t dwLocalPlayerController = 0x1A0D988;
+    uint64_t dwLocalPlayerPawn = 0x1823A08;
+    uint64_t m_vOldOrigin = 0x1274;
+    uint64_t dwViewMatrix = 0x1A1FCB0;
 
     uint64_t m_hPlayerPawn = 0x7DC;
-    uint64_t dwLocalPlayerController = 0x1A0D9A8;
     uint64_t m_lifeState = 0x328;
-    uint64_t dwLocalPlayerPawn = 0x1823A08;
-    //uint64_t m_iTeamNum = 0x3C3;
-
-
-
 }
 
-
-
-
-
-uint64_t m_vOldOrigin = 0x1274;
-uint64_t dwViewMatrix = 0x1A1FCD0;
 
 void CreateConsole() {
     AllocConsole();
@@ -243,14 +234,14 @@ int APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, int cmd_show)
         // Step 2: Add scatter read requests for initial values
         mem.AddScatterReadRequest(Handle, base + Offsets::dwLocalPlayerPawn, &LocalPlayer, sizeof(uint64_t));
         mem.AddScatterReadRequest(Handle, base + Offsets::dwEntityList, &entityList, sizeof(uint64_t));
-        mem.AddScatterReadRequest(Handle, base + dwViewMatrix, &View_Matrix, sizeof(View_matrix_t));
+        mem.AddScatterReadRequest(Handle, base + Offsets::dwViewMatrix, &View_Matrix, sizeof(View_matrix_t));
 
         // Execute the scatter read
         mem.ExecuteReadScatter(Handle);
 
         // Read local player position
         if (LocalPlayer != 0) {
-            mem.AddScatterReadRequest(Handle, LocalPlayer + m_vOldOrigin, &localplayerpos, sizeof(Vector3));
+            mem.AddScatterReadRequest(Handle, LocalPlayer + Offsets::m_vOldOrigin, &localplayerpos, sizeof(Vector3));
             mem.ExecuteReadScatter(Handle);
             //std::cout << "LOCALPLAYER X: " << localplayerpos.x << " Y: " << localplayerpos.y << " Z: " << localplayerpos.z << std::endl;
 
@@ -317,7 +308,7 @@ int APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, int cmd_show)
             }
 
             // Create scatter handle for enemy position reads
-            mem.AddScatterReadRequest(Handle, currentPawn[i] + m_vOldOrigin, &enemyPos, sizeof(Vector3));
+            mem.AddScatterReadRequest(Handle, currentPawn[i] + Offsets::m_vOldOrigin, &enemyPos, sizeof(Vector3));
             mem.ExecuteReadScatter(Handle);
             //We're done with using the scatter handle...
             //mem.CloseScatterHandle(Handle);
