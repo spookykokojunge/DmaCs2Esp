@@ -30,15 +30,6 @@ Download and place the required DLLs in the root directory.
 Download the necessary libraries and place them in the libs/ folder.
 Compile the project using your preferred IDE or build system.
 
-# Guide
-## Using the DMA ESP Cheat for CS2
-This is a test version of the DMA ESP cheat for CS2, designed to showcase the capabilities of the DMALibrary.
-
-Setup: Ensure all prerequisites are met (see above).
-Compile: Follow the instructions in the "Building the Project" section.
-Run: After compiling, run the program and test the ESP cheat in CS2.
-For detailed instructions and support, visit our website: Zynx.cc.
-
 ## Additional Services
 Looking for more advanced features or private cheats? Interested in hiring a cheat developer? Visit Zynx.cc to explore our offerings, including private cheat development services.
 
