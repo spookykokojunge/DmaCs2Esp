@@ -1,41 +1,51 @@
-# DMALibrary
-Simple but extensive library for DMA users
+## DMALibrary for CS2 DMA ESP Cheat
+Welcome to the DMALibrary repository, a simple yet extensive library for DMA users. This library is designed to support a wide range of memory manipulation and kernel interaction features, making it ideal for projects such as developing ESP cheats for games like CS2.
 
-Supports
-- Sig Scanning
-- Read Memory
-- Write Memory
-- Scatter Read Memory
-- Scatter Write Memory
-- Dumping Physical Memory
-- Dumping Memory
-- Fix CR3
-- Target Computer Keyboard
-- Getting PID & Base Address
-- Code Cave Finder
-- Function Caller
-- Syscalling kernel functions
-- Utilities (Get Import, Get Export, Get Base Size ect)
-- Clean & Good documented code.
+# Features
+-esp
 
-## Please read!
+## Getting Started
+# Prerequisites
+This program requires the following DLLs to be in the root directory when running:
 
-The program expects you to have the dlls FTD3XX.dll, leechcore.dll and vmm.dll (download them from your DMA supplier) at the root directory when shipping the program.
+- FTD3XX.dll
+- leechcore.dll
+- vmm.dll
+Download these from your DMA supplier.
 
-If you're making use of the CR3 Fix you requires additional .dlls as mentioned in the source.
-Using CR3 fix requires you to have symsrv.dll, dbghelp.dll and info.db
-You can find all these also in the compiled version of ulfrisk.
+You can find these additional files in the compiled version of ulfrisk.
 
-The project requires the leechcore.lib and vmm.lib libraries in the libs/ folder. I did not add the precompiled libraries for security purposes. 
-You can get the files from 
-https://github.com/ufrisk/LeechCore
-and
-https://github.com/ufrisk/MemProcFS/tree/master/vmm
+# Libraries
+This project depends on leechcore.lib and vmm.lib, which need to be placed in the libs/ folder. For security reasons, precompiled libraries are not included in this repository.
 
-and compiled from if you are lazy.
-https://github.com/ufrisk/MemProcFS/tree/master/includes/lib32
+You can get the necessary files from:
 
-Also special thanks to ufrisk for the libraries i used in this project.
+LeechCore
+MemProcFS VMM
+If you prefer precompiled libraries, they are available here.
 
-## License
-License This DMALibrary is open-source and licensed under the MIT License. Feel free to use, modify, and distribute it in your projects.
+# Building the Project
+Clone the repository to your local machine.
+Download and place the required DLLs in the root directory.
+Download the necessary libraries and place them in the libs/ folder.
+Compile the project using your preferred IDE or build system.
+
+# Guide
+# Using the DMA ESP Cheat for CS2
+This is a test version of the DMA ESP cheat for CS2, designed to showcase the capabilities of the DMALibrary.
+
+Setup: Ensure all prerequisites are met (see above).
+Compile: Follow the instructions in the "Building the Project" section.
+Run: After compiling, run the program and test the ESP cheat in CS2.
+For detailed instructions and support, visit our website: Zynx.cc.
+
+# Additional Services
+Looking for more advanced features or private cheats? Interested in hiring a cheat developer? Visit Zynx.cc to explore our offerings, including private cheat development services.
+
+# License
+This DMALibrary is open-source and licensed under the MIT License. Feel free to use, modify, and distribute it in your projects.
+
+# Disclaimer
+This repository and the associated code are intended for educational and research purposes only. The use of this code for cheating in games or other unethical activities is strongly discouraged.
+
+Thank you for checking out the DMALibrary. For more information, updates, or to purchase private cheats, visit Zynx.cc.
