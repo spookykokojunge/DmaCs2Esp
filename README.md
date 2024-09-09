@@ -16,12 +16,14 @@ Download these from your DMA supplier.
 You can find these additional files in the compiled version of ulfrisk.
 
 ## Libraries
-This project depends on leechcore.lib and vmm.lib, which need to be placed in the libs/ folder. For security reasons, precompiled libraries are not included in this repository.
+This project depends on leechcore.lib and vmm.lib, which need to be placed in the DMALibrary -> libs folder. For security reasons, precompiled libraries are not included in this repository.
 
-You can get the necessary files from:
+You can find the .libs in the include folders of both projects:
 
 LeechCore,
 MemProcFS
+
+
 
 ## Building the Project
 Clone the repository to your local machine.
