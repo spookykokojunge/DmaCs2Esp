@@ -1,5 +1,5 @@
-# DMALibrary for CS2 DMA ESP Cheat
-Welcome to the DMALibrary repository, a simple yet extensive library for DMA users. This library is designed to support a wide range of memory manipulation and kernel interaction features, making it ideal for projects such as developing ESP cheats for games like CS2.
+#  CS2 DMA ESP Cheat
+Welcome to the DmaCs2Esp repository, a simple yet powerful tool for DMA users.
 
 ## Features
 -esp
@@ -20,7 +20,7 @@ This project depends on leechcore.lib and vmm.lib, which need to be placed in th
 
 You can get the necessary files from:
 
-LeechCore
+LeechCore,
 MemProcFS
 
 ## Building the Project
@@ -29,13 +29,12 @@ Download and place the required DLLs in the root directory.
 Download the necessary libraries and place them in the libs/ folder.
 Compile the project using your preferred IDE or build system.
 
-## Additional Services
-Looking for more advanced features or private cheats? Interested in hiring a cheat developer? Visit Zynx.cc to explore our offerings, including private cheat development services.
+## Credits
+Special thanks to Metick for his invaluable assistance in the development of this cheat and for generously allowing the use of his library. Your expertise and support have been crucial to the success of this project.
+https://github.com/Metick/DMALibrary
 
 ## License
 This DMALibrary is open-source and licensed under the MIT License. Feel free to use, modify, and distribute it in your projects.
 
 ## Disclaimer
 This repository and the associated code are intended for educational and research purposes only. The use of this code for cheating in games or other unethical activities is strongly discouraged.
-
-Thank you for checking out the DMALibrary. For more information, updates, or to purchase private cheats, visit Zynx.cc.
