@@ -258,12 +258,18 @@ int APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, int cmd_show)
 		}
 
 		if (entityList == 0)
+		{
+			mem.CloseScatterHandle(Handle);
 			continue;
+		}
 		mem.AddScatterReadRequest(Handle, entityList + 0x10, &listEntry, sizeof(uint64_t));
 		mem.ExecuteReadScatter(Handle);
 		//uint64_t listEntry = mem.Read<uint64_t>(entityList + 0x10);
 		if (listEntry == 0)
+		{
+			mem.CloseScatterHandle(Handle);
 			continue;
+		}
 
 		ImGui_ImplDX11_NewFrame();
 		ImGui_ImplWin32_NewFrame();
@@ -311,13 +317,9 @@ int APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, int cmd_show)
 		{
 			auto player = players[i];
 			if (player.lifestate != 256)
-			{
 				continue;
-			}
 			if (player.currentPawn == LocalPlayer)
-			{
 				continue;
-			}
 
 			//std::cout << "ENEMYS X: " << enemyPos.x << " Y: " << enemyPos.y << " Z: " << enemyPos.z << std::endl;
 
