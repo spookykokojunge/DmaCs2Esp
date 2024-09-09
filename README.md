@@ -6,7 +6,7 @@ Welcome to the DmaCs2Esp repository, a simple yet powerful tool for DMA users.
 
 # Getting Started
 ## Prerequisites
-This program requires the following DLLs to be in the root directory when running:
+This program requires the following DLLs to be in the root directory when running(folder with the tool inside):
 
 - FTD3XX.dll
 - leechcore.dll
@@ -30,9 +30,15 @@ Clone the repository to your local machine.
 Download and place the required DLLs in the root directory.
 Download the necessary libraries and place them in the libs/ folder.
 Compile the project using your preferred IDE or build system.
+Have fun.
+
+## Update
+To update the offsets, navigate to main.cpp and modify the values in the offsets namespace, starting at line 51.
+(The offsets are old in this repo as i didnt use it for a long time)
+
 
 ## Credits
-Special thanks to Metick for his invaluable assistance in the development of this cheat and for generously allowing the use of his library. Your expertise and support have been crucial to the success of this project.
+Special thanks to Metick for his assistance in the development of this cheat and for allowing the use of his library.
 https://github.com/Metick/DMALibrary
 
 ## License
