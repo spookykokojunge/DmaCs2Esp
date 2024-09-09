@@ -21,8 +21,7 @@ This project depends on leechcore.lib and vmm.lib, which need to be placed in th
 You can get the necessary files from:
 
 LeechCore
-MemProcFS VMM
-If you prefer precompiled libraries, they are available here.
+MemProcFS
 
 ## Building the Project
 Clone the repository to your local machine.
